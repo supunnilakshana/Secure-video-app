@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "10679689190",
+    "project_id": "video-732b5",
+    "storage_bucket": "video-732b5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:10679689190:android:6ccb462e6360524bb2c027",
+        "android_client_info": {
+          "package_name": "com.zeedxdev.svideo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "10679689190-gdj7uj61epem62ginlesn92ehgq8goil.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zeedxdev.svideo",
+            "certificate_hash": "47fffe8b60b5d2b224782a62746d7fe78d0dbab0"
+          }
+        },
+        {
+          "client_id": "10679689190-a1b9108mjo80idarl814e32l9av7md37.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_rTqH3ydppgHM234O6NesaIIHniKn6WE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "10679689190-a1b9108mjo80idarl814e32l9av7md37.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
