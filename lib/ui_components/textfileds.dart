@@ -143,8 +143,9 @@ class Gnoiconformfiled extends StatelessWidget {
       controller: controller,
       validator: valid,
       decoration: InputDecoration(
-        enabledBorder: const OutlineInputBorder(
+        enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: Colors.blue, width: 1.6),
+          borderRadius: BorderRadius.circular(50.0),
         ),
         hintText: hintText,
         labelText: label,

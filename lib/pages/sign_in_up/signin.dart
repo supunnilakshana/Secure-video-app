@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:securevideo/constants_data/ui_constants.dart';
+import 'package:securevideo/pages/Home/homescreen.dart';
 import 'package:securevideo/service/auth/auth.dart';
 import 'package:securevideo/service/validater/validate_handeler.dart';
 import 'package:securevideo/ui_components/already_have_an_account_acheck.dart';
@@ -47,7 +48,7 @@ class _SigninState extends State<Signin> {
                       style: TextStyle(
                           fontSize: size.width * 0.068,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black87),
+                          color: Colors.black.withOpacity(0.75)),
                     ),
                     SizedBox(
                       height: size.height * 0.12,
@@ -145,6 +146,15 @@ class _SigninState extends State<Signin> {
                                   status = true;
                                 });
                               }
+
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return Homescreen();
+                                  },
+                                ),
+                              );
                             } else {
                               print("not complete");
                             }

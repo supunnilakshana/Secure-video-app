@@ -45,7 +45,7 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: kprimarylightcolor,
           elevation: 0,
           iconTheme: IconThemeData(color: Colors.black),
         ),
@@ -64,7 +64,7 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
                       style: TextStyle(
                           fontSize: size.width * 0.068,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black87),
+                          color: Colors.black.withOpacity(0.75)),
                     ),
                     SizedBox(
                       height: size.height * 0.12,

@@ -7,7 +7,7 @@ class UserdbHandeler {
 
 //--------------------------------------add user----------------------------------------------------------------------------
   static Future<void> adduser(String email) async {
-    firestoreInstance.collection("users").doc(user!.email.toString()).set({
+    firestoreInstance.collection("users").doc(email).set({
       "email": email,
     }).then((_) {
       print("create user doc");

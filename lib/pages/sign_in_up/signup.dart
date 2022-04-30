@@ -53,7 +53,7 @@ class _SignupState extends State<Signup> {
                       style: TextStyle(
                           fontSize: size.width * 0.068,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black87),
+                          color: Colors.black.withOpacity(0.75)),
                     ),
                     SizedBox(
                       height: size.height * 0.1,
@@ -136,16 +136,20 @@ class _SignupState extends State<Signup> {
                                 ),
                               ));
                               Random random = Random();
-                              int code = random.nextInt(5);
-
-                              int res = await Emailverification.sendcode(
-                                  email, code.toString());
+                              String code = random.nextInt(9).toString() +
+                                  random.nextInt(9).toString() +
+                                  random.nextInt(9).toString() +
+                                  random.nextInt(9).toString() +
+                                  random.nextInt(9).toString();
+                              print(code);
+                              int res =
+                                  await Emailverification.sendcode(email, code);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) {
                                     return EmailVerifyScreen(
-                                      sendcode: code.toString(),
+                                      sendcode: code,
                                       email: email,
                                       password: password,
                                     );

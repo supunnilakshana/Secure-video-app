@@ -16,7 +16,7 @@ class AuthChecking extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         } else if (snapshot.hasData) {
-          return HomeScreen();
+          return Homescreen();
         } else if (snapshot.hasError) {
           return Center(
             child: Text("Somthing wrong!!"),
