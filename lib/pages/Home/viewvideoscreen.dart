@@ -352,9 +352,12 @@ class _ViewVideoScreen extends State<ViewVideoScreen> {
           return Errorpage(size: size.width * 0.7);
         }
         // By default show a loading spinner.
-        return Center(
-            child: Lottie.asset("assets/animation/downloading.json",
-                width: size.width * 0.6));
+        return Scaffold(
+          backgroundColor: kprimarylightcolor,
+          body: Center(
+              child: Lottie.asset("assets/animation/downloading.json",
+                  width: size.width * 0.6)),
+        );
       },
     );
   }
