@@ -73,7 +73,7 @@ class Cryptovideo {
     return (EncryptedItem(video: outFile, key: keytext));
   }
 
-  Future<File?> decryptFile(File inFile, String keycode) async {
+  Future<File> decryptFile(File inFile, String keycode) async {
     String dir = (await getApplicationDocumentsDirectory()).path;
     File outFile = File("$dir/videodec.mp4");
 

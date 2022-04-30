@@ -143,8 +143,8 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
 
                                 if (r == 0) {
                                   await UserdbHandeler.adduser(widget.email);
-                                  await UserdbHandeler.updateuserlist(
-                                      widget.email);
+                                  // await UserdbHandeler.updateuserlist(
+                                  //     widget.email);
                                   print("r name");
                                   Navigator.push(
                                     context,

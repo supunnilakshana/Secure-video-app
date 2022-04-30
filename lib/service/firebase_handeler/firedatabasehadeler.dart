@@ -1,12 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:securevideo/models/eventnewsachievementsmodel.dart';
-import 'package:securevideo/models/galleryitemmodel.dart';
+import 'package:securevideo/models/keymodel.dart';
+import 'package:securevideo/models/videomodel.dart';
 
 class FireDBhandeler {
   static final firestoreInstance = FirebaseFirestore.instance;
   static final DatabaseReference dbRef = FirebaseDatabase.instance.ref("count");
+
+  static final user = FirebaseAuth.instance.currentUser;
+  static String mainUserpath = "/users/" + user!.email.toString() + "/";
+  static final String inboxpath = "inbox";
+  static final String sentpath = "sentbox";
+  static final String inkeyboxpath = "inkeybox";
+  static final String sentkeyboxpath = "sentkeybox";
+
   //check doc is exists
   static Future<int> checkdocstatus(String collectionpath, String docid) async {
     var a = await FirebaseFirestore.instance
@@ -24,146 +32,125 @@ class FireDBhandeler {
     }
   }
 
-  //add gallery item
-  static Future<int> addgalleryitem(GalleryItemmodel gmodel) async {
-    int status = await checkdocstatus("gallery", gmodel.id);
+  //add
+  static Future<int> sendvideodoc(Videomodel gmodel, String email) async {
+    String senduserpath = "/users/" + email + "/" + inboxpath;
+    int status = await checkdocstatus(senduserpath, gmodel.id);
     if (status == 1) {
       firestoreInstance
-          .collection("gallery")
+          .collection(senduserpath)
           .doc(gmodel.id)
           .set(gmodel.toMap())
           .then((_) {
-        print("creategalley doc");
+        print("create  doc");
       });
     } else {
-      print("  already exsists");
+      print("already exsists");
     }
     return status;
   }
 
-  //get gallery items
-  static Future<List<GalleryItemmodel>> getGallery() async {
-    List<GalleryItemmodel> glist = [];
-    GalleryItemmodel gmodel;
+  static Future<int> savevideodoc(Videomodel gmodel) async {
+    int status = await checkdocstatus(mainUserpath + sentpath, gmodel.id);
+    if (status == 1) {
+      firestoreInstance
+          .collection(mainUserpath + sentpath)
+          .doc(gmodel.id)
+          .set(gmodel.toMap())
+          .then((_) {
+        print("create  doc");
+      });
+    } else {
+      print("already exsists");
+    }
+    return status;
+  }
+
+  static Future<int> sendkeydoc(Keymodel gmodel, String email) async {
+    String senduserpath = "/users/" + email + "/" + inkeyboxpath;
+    int status = await checkdocstatus(senduserpath, gmodel.id);
+    if (status == 1) {
+      firestoreInstance
+          .collection(senduserpath)
+          .doc(gmodel.id)
+          .set(gmodel.toMap())
+          .then((_) {
+        print("create  doc");
+      });
+    } else {
+      print("already exsists");
+    }
+    return status;
+  }
+
+  static Future<int> savekeydoc(Keymodel gmodel) async {
+    int status = await checkdocstatus(mainUserpath + sentkeyboxpath, gmodel.id);
+    if (status == 1) {
+      firestoreInstance
+          .collection(mainUserpath + sentkeyboxpath)
+          .doc(gmodel.id)
+          .set(gmodel.toMap())
+          .then((_) {
+        print("create  doc");
+      });
+    } else {
+      print("already exsists");
+    }
+    return status;
+  }
+
+  //get  items
+  static Future<List<Videomodel>> getinbox() async {
+    List<Videomodel> glist = [];
+    Videomodel gmodel;
     QuerySnapshot querySnapshot =
-        await firestoreInstance.collection("gallery").get();
+        await firestoreInstance.collection(mainUserpath + inboxpath).get();
     for (int i = 0; i < querySnapshot.docs.length; i++) {
       var a = querySnapshot.docs[i];
 
       // teachermodel = Teachermodel.fromSnapshot(a);
-      gmodel = GalleryItemmodel.fromMap(a.data() as Map<String, dynamic>);
+      gmodel = Videomodel.fromMap(a.data() as Map<String, dynamic>);
       glist.add(gmodel);
       // print(teachermodel.serialno);
     }
     return glist;
   }
 
-  //add event, news or achievement
-  static Future<int> addEventNews(EventNewsAchievementsModel enmodel) async {
-    int status = await checkdocstatus("eventnews", enmodel.id);
-    if (status == 1) {
-      firestoreInstance
-          .collection("eventnews")
-          .doc(enmodel.id)
-          .set(enmodel.toMap())
-          .then((_) {
-        print("create eventnews doc");
-      });
-    } else {
-      print(" event or news item already exists");
-    }
-    return status;
-  }
-
-  //get event/news items
-  static Future<List<EventNewsAchievementsModel>> getEventsNews() async {
-    List<EventNewsAchievementsModel> enlist = [];
-    EventNewsAchievementsModel enmodel;
+  static Future<List<Videomodel>> getsentbox() async {
+    List<Videomodel> glist = [];
+    Videomodel gmodel;
     QuerySnapshot querySnapshot =
-        await firestoreInstance.collection("eventnews").get();
+        await firestoreInstance.collection(mainUserpath + sentpath).get();
     for (int i = 0; i < querySnapshot.docs.length; i++) {
       var a = querySnapshot.docs[i];
-      print(a.data());
-      enmodel =
-          EventNewsAchievementsModel.fromMap(a.data() as Map<String, dynamic>);
-      enlist.add(enmodel);
-      print("passed");
+
+      // teachermodel = Teachermodel.fromSnapshot(a);
+      gmodel = Videomodel.fromMap(a.data() as Map<String, dynamic>);
+      glist.add(gmodel);
+      // print(teachermodel.serialno);
     }
-    print(enlist);
-    return enlist;
+    return glist;
   }
 
-  //update events/news
+  static Future<Keymodel> getsentkey(String id) async {
+    final String collectionpath = mainUserpath + sentkeyboxpath;
+    Keymodel model;
 
-  static Future<int> updateEventNews(EventNewsAchievementsModel enmodel) async {
-    int status = await checkdocstatus("eventnews", enmodel.id);
-    if (status == 0) {
-      firestoreInstance
-          .collection("eventnews")
-          .doc(enmodel.id)
-          .update(enmodel.toMap())
-          .then((_) {
-        print("updated event/news doc");
-      });
-    } else {
-      print(" no such event/doc");
-    }
-    return status;
+    DocumentSnapshot documentSnapshot =
+        await firestoreInstance.collection(collectionpath).doc(id).get();
+    model = Keymodel.fromMap(documentSnapshot.data() as Map<String, dynamic>);
+    return model;
   }
 
-  //add achievement
-  static Future<int> addAchievement(EventNewsAchievementsModel enmodel) async {
-    int status = await checkdocstatus("achievements", enmodel.id);
-    if (status == 1) {
-      firestoreInstance
-          .collection("achievements")
-          .doc(enmodel.id)
-          .set(enmodel.toMap())
-          .then((_) {
-        print("create achievements doc");
-      });
-    } else {
-      print(" achievements item already exists");
-    }
-    return status;
-  }
+  static Future<Keymodel> getrecivekey(String id) async {
+    final String collectionpath = mainUserpath + sentkeyboxpath;
+    Keymodel model;
 
-  //get achievement
-  static Future<List<EventNewsAchievementsModel>> getAchievements() async {
-    List<EventNewsAchievementsModel> enlist = [];
-    EventNewsAchievementsModel enmodel;
-    QuerySnapshot querySnapshot =
-        await firestoreInstance.collection("achievements").get();
-    for (int i = 0; i < querySnapshot.docs.length; i++) {
-      var a = querySnapshot.docs[i];
-      print(a.data());
-      enmodel =
-          EventNewsAchievementsModel.fromMap(a.data() as Map<String, dynamic>);
-      enlist.add(enmodel);
-      print("passed");
-    }
-    print(enlist);
-    return enlist;
+    DocumentSnapshot documentSnapshot =
+        await firestoreInstance.collection(collectionpath).doc(id).get();
+    model = Keymodel.fromMap(documentSnapshot.data() as Map<String, dynamic>);
+    return model;
   }
-
-  //update achievement
-  static Future<int> updateAchievement(
-      EventNewsAchievementsModel enmodel) async {
-    int status = await checkdocstatus("achievements", enmodel.id);
-    if (status == 0) {
-      firestoreInstance
-          .collection("achievements")
-          .doc(enmodel.id)
-          .update(enmodel.toMap())
-          .then((_) {
-        print("updated achievements doc");
-      });
-    } else {
-      print(" no such achievement");
-    }
-    return status;
-  }
-
   //getdoccount
 
   static Future<int> getDocCount(String collection) async {
