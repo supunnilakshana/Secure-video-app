@@ -48,8 +48,7 @@ class _SentboxscreenState extends State<Sentboxscreen> {
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.only(
-                    top: size.width * 0.1, bottom: size.width * 0.01),
+                padding: EdgeInsets.only(bottom: size.width * 0.03),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

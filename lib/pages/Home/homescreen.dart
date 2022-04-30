@@ -6,6 +6,8 @@ import 'package:line_icons/line_icons.dart';
 import 'package:securevideo/constants_data/ui_constants.dart';
 import 'package:securevideo/pages/Home/inbox_tab/inboxscreen.dart';
 import 'package:securevideo/pages/Home/sentbox_tab/sentboxscreen.dart';
+import 'package:securevideo/pages/sign_in_up/signin.dart';
+import 'package:securevideo/ui_components/popup_dilog.dart';
 
 class Homescreen extends StatefulWidget {
   final int index;
@@ -26,6 +28,7 @@ class _HomescreenState extends State<Homescreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     List<Widget> _widgetOptions = <Widget>[Inboxscreen(), Sentboxscreen()];
     return WillPopScope(
       onWillPop: () {
@@ -45,6 +48,31 @@ class _HomescreenState extends State<Homescreen> {
         }
       },
       child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton(
+                onPressed: () {
+                  PopupDialog.showPopupDilog(context, () async {
+                    await FirebaseAuth.instance.signOut();
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => Signin()));
+                    print("logingout");
+                  }, "Signout", "Do you want to signout ? ");
+                },
+                icon: Icon(
+                  Icons.logout_outlined,
+                  size: size.width * 0.08,
+                ),
+                color: Colors.black87,
+              ),
+            ),
+          ],
+        ),
         backgroundColor: Colors.white,
         body: Center(
           child: _widgetOptions.elementAt(_selectedIndex),

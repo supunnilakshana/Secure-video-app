@@ -47,8 +47,7 @@ class _InboxscreenState extends State<Inboxscreen> {
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.only(
-                    top: size.width * 0.1, bottom: size.width * 0.01),
+                padding: EdgeInsets.only(bottom: size.width * 0.03),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -134,15 +133,14 @@ class _InboxscreenState extends State<Inboxscreen> {
                                                           width: 1.0,
                                                           color:
                                                               Colors.white24))),
-                                              child: Icon(
-                                                  Icons.event_note_rounded,
+                                              child: Icon(Icons.mail_outline,
                                                   color: Colors.white),
                                             ),
                                             title: Row(
                                               children: [
                                                 Flexible(
                                                   child: Text(
-                                                    data[indext].reciveremail,
+                                                    data[indext].senderemail,
                                                     style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize:
