@@ -113,6 +113,7 @@ class FireDBhandeler {
       glist.add(gmodel);
       // print(teachermodel.serialno);
     }
+    glist.sort((a, b) => b.id.compareTo(a.id));
     return glist;
   }
 
@@ -129,6 +130,7 @@ class FireDBhandeler {
       glist.add(gmodel);
       // print(teachermodel.serialno);
     }
+    glist.sort((a, b) => b.id.compareTo(a.id));
     return glist;
   }
 

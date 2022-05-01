@@ -1,6 +1,5 @@
 import 'dart:math';
-
-import 'package:random_string_generator/random_string_generator.dart';
+import 'package:random_string/random_string.dart';
 
 class KeyStore {
   var random = new Random();
@@ -218,13 +217,8 @@ class KeyStore {
     'kaAxx6iG5TEhLOqh1sYt0MpXG0DSdDBI'
   ];
 
-  String genaratekeycode() {
-    var generator = RandomStringGenerator(
-      minLength: 32,
-      maxLength: 32,
-    );
-
-    String keycode = generator.generate();
+  static String genaratekeycode() {
+    String keycode = randomAlphaNumeric(32);
     return keycode;
   }
 }

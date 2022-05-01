@@ -187,7 +187,7 @@ class _ViewVideoScreen extends State<ViewVideoScreen> {
                                                 text: 'Video is',
                                                 style: TextStyle()),
                                             TextSpan(
-                                                text: 'Ecrypted!',
+                                                text: ' Encrypted!',
                                                 style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize:

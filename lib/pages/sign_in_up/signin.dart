@@ -141,20 +141,19 @@ class _SigninState extends State<Signin> {
                               int r = emailauth.getSigninstatus();
                               if (r == 0) {
                                 print("loged");
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return Homescreen();
+                                    },
+                                  ),
+                                );
                               } else {
                                 setState(() {
                                   status = true;
                                 });
                               }
-
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return Homescreen();
-                                  },
-                                ),
-                              );
                             } else {
                               print("not complete");
                             }

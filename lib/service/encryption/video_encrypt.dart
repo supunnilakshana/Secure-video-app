@@ -47,9 +47,7 @@ class Cryptovideo {
   Future<EncryptedItem> encryptFile(File video) async {
     String dir = (await getApplicationDocumentsDirectory()).path;
     File outFile = new File("$dir/videoenc.aes");
-    KeyItem keyItem = _keyStore.genarateKeyitem();
-
-    String keytext = keyItem.key;
+    String keytext = KeyStore.genaratekeycode();
 
     bool outFileExists = await outFile.exists();
 
