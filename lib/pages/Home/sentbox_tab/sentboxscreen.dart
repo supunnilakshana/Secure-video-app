@@ -34,7 +34,7 @@ class _SentboxscreenState extends State<Sentboxscreen> {
         backgroundColor: Colors.white,
         floatingActionButton: FloatingActionButton.extended(
             elevation: 0.0,
-            label: Text("Send secure Video"),
+            label: Text("Send File"),
             icon: Icon(Icons.send),
             backgroundColor: kprimaryColor,
             onPressed: () {
@@ -134,8 +134,7 @@ class _SentboxscreenState extends State<Sentboxscreen> {
                                                           width: 1.0,
                                                           color:
                                                               Colors.white24))),
-                                              child: Icon(
-                                                  Icons.event_note_rounded,
+                                              child: Icon(Icons.mail_outline,
                                                   color: Colors.white),
                                             ),
                                             title: Row(

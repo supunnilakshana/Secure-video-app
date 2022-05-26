@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:securevideo/constants_data/ui_constants.dart';
 import 'package:securevideo/pages/Home/homescreen.dart';
 import 'package:securevideo/service/auth/auth.dart';
+import 'package:securevideo/service/auth/google/GoogleSignAuth.dart';
 import 'package:securevideo/service/validater/validate_handeler.dart';
 import 'package:securevideo/ui_components/already_have_an_account_acheck.dart';
 import 'package:securevideo/ui_components/buttons.dart';
 import 'package:securevideo/ui_components/or_divider.dart';
+import 'package:securevideo/ui_components/social_icon.dart';
 import 'package:securevideo/ui_components/textfileds.dart';
 
 import 'background.dart';
@@ -43,7 +46,7 @@ class _SigninState extends State<Signin> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      "Hello!!  Welcome to  Secure Video",
+                      "Welcome to  cDrive",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: size.width * 0.068,
@@ -137,9 +140,10 @@ class _SigninState extends State<Signin> {
                               print("press login");
                               print(email);
                               print(password);
-                              await emailauth.emailsignIN(email, password);
-                              int r = emailauth.getSigninstatus();
-                              if (r == 0) {
+                              int r =
+                                  await emailauth.emailsignIN(email, password);
+
+                              if (r == 1) {
                                 print("loged");
                                 Navigator.pushReplacement(
                                   context,
@@ -176,30 +180,44 @@ class _SigninState extends State<Signin> {
                       },
                     ),
                     OrDivider(),
-                    Padding(
-                      padding: EdgeInsets.only(top: size.height * 0),
-                      child: GestureDetector(
-                        onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) {
-                          //       return Forgetpasswordscreen();
-                          //     },
-                          //   ),
-                          // );
-                        },
-                        child: Text(
-                          "Forgot password ?",
-                          style: TextStyle(
-                              //fontSize: size.width * 0.025,
-                              fontWeight: FontWeight.bold,
-                              color: status
-                                  ? kprimaryColor
-                                  : Colors.black.withOpacity(0.7)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        SocalIcon(
+                          iconSrc: "assets/icons/google-symbol.svg",
+                          press: () {
+                            final provider = Provider.of<GoogleSignInProvider>(
+                                context,
+                                listen: false);
+                            provider.googleLogin();
+                          },
                         ),
-                      ),
+                      ],
                     ),
+                    // Padding(
+                    //   padding: EdgeInsets.only(top: size.height * 0),
+                    //   child: GestureDetector(
+                    //     onTap: () {
+                    //       // Navigator.push(
+                    //       //   context,
+                    //       //   MaterialPageRoute(
+                    //       //     builder: (context) {
+                    //       //       return Forgetpasswordscreen();
+                    //       //     },
+                    //       //   ),
+                    //       // );
+                    //     },
+                    //     child: Text(
+                    //       "Forgot password ?",
+                    //       style: TextStyle(
+                    //           //fontSize: size.width * 0.025,
+                    //           fontWeight: FontWeight.bold,
+                    //           color: status
+                    //               ? kprimaryColor
+                    //               : Colors.black.withOpacity(0.7)),
+                    //     ),
+                    //   ),
+                    // ),
                     SizedBox(
                       height: size.height * 0.08,
                     ),

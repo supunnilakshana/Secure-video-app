@@ -7,8 +7,10 @@
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     
    <application
-        android:label="Secure Video"
-        android:icon="@mipmap/launcher_icon">
+        android:label="Cdrive"
+        android:icon="@mipmap/launcher_icon"
+        android:usesCleartextTraffic="true"
+        >
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -43,5 +45,6 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+            
     </application>
 </manifest>

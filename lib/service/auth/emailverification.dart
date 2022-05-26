@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 class Emailverification {
   static Future<int> sendcode(String email, String code) async {
+    print(email);
     int res = 0;
     final url = Uri.parse('https://api.sendgrid.com/v3/mail/send');
     try {
@@ -36,7 +37,7 @@ class Emailverification {
         }),
       );
 
-      print(response.body);
+      print(response.statusCode.toString() + "---------");
       if (response.statusCode == 201 || response.statusCode == 200) {
         res = 1;
         print(response.body);

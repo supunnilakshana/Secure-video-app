@@ -12,8 +12,9 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:securevideo/constants_data/init_constansdata.dart';
 import 'package:securevideo/constants_data/ui_constants.dart';
+import 'package:securevideo/models/drivemodel.dart';
 import 'package:securevideo/models/keymodel.dart';
-import 'package:securevideo/models/videomodel.dart';
+
 import 'package:securevideo/pages/Home/homescreen.dart';
 import 'package:securevideo/pages/Home/playvidescreen.dart';
 import 'package:securevideo/service/encryption/video_encrypt.dart';
@@ -29,18 +30,16 @@ import 'package:securevideo/ui_components/tots.dart';
 import 'package:video_player/video_player.dart';
 import 'package:path/path.dart' as p;
 
-class ViewVideoScreen extends StatefulWidget {
-  final Videomodel videomodel;
-  final bool issent;
+class ViewDriveItemScreen extends StatefulWidget {
+  final Drivemodel drivemodel;
 
-  const ViewVideoScreen(
-      {Key? key, required this.videomodel, required this.issent})
+  const ViewDriveItemScreen({Key? key, required this.drivemodel})
       : super(key: key);
   @override
-  _ViewVideoScreen createState() => _ViewVideoScreen();
+  _ViewDriveItemScreen createState() => _ViewDriveItemScreen();
 }
 
-class _ViewVideoScreen extends State<ViewVideoScreen> {
+class _ViewDriveItemScreen extends State<ViewDriveItemScreen> {
   final user = FirebaseAuth.instance.currentUser;
 
   bool isvudeoload = false;
@@ -59,11 +58,8 @@ class _ViewVideoScreen extends State<ViewVideoScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.issent) {
-      futureData = FireDBhandeler.getsentkey(widget.videomodel.id);
-    } else {
-      futureData = FireDBhandeler.getrecivekey(widget.videomodel.id);
-    }
+
+    futureData = FireDBhandeler.getDriveKey(widget.drivemodel.id);
   }
 
   @override
@@ -230,7 +226,7 @@ class _ViewVideoScreen extends State<ViewVideoScreen> {
                                       try {
                                         String downloadfilepath =
                                             await ImageUploader.downloadfile(
-                                                widget.videomodel.videourl,
+                                                widget.drivemodel.fileUrl,
                                                 Date.getDateTimeId() +
                                                     enextenion);
                                         Cryptovideo cryptovideo = Cryptovideo();
@@ -323,7 +319,8 @@ class _ViewVideoScreen extends State<ViewVideoScreen> {
                                               Colors.blueGrey.withOpacity(0.8),
                                         ),
                                         title: Text(
-                                          widget.videomodel.reciveremail,
+                                          widget.drivemodel.fileName +
+                                              widget.drivemodel.extesion,
                                           style: TextStyle(
                                               fontSize: size.width * 0.043,
                                               fontWeight: FontWeight.w600,
@@ -331,7 +328,7 @@ class _ViewVideoScreen extends State<ViewVideoScreen> {
                                                   .withOpacity(0.8)),
                                         ),
                                         subtitle: Text(
-                                          "Date : " + widget.videomodel.date,
+                                          "Date : " + widget.drivemodel.date,
                                           style: TextStyle(
                                               fontSize: size.width * 0.023,
                                               fontWeight: FontWeight.w500,

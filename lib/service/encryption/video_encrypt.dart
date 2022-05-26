@@ -71,9 +71,10 @@ class Cryptovideo {
     return (EncryptedItem(video: outFile, key: keytext));
   }
 
-  Future<File> decryptFile(File inFile, String keycode) async {
+  Future<File> decryptFile(
+      File inFile, String keycode, String extension) async {
     String dir = (await getApplicationDocumentsDirectory()).path;
-    File outFile = File("$dir/videodec.mp4");
+    File outFile = File("$dir/videodec" + extension);
 
     bool outFileExists = await outFile.exists();
 

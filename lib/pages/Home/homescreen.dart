@@ -4,6 +4,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 
 import 'package:securevideo/constants_data/ui_constants.dart';
+import 'package:securevideo/pages/Home/drive_tab/driveScreen.dart';
 import 'package:securevideo/pages/Home/inbox_tab/inboxscreen.dart';
 import 'package:securevideo/pages/Home/sentbox_tab/sentboxscreen.dart';
 import 'package:securevideo/pages/sign_in_up/signin.dart';
@@ -29,7 +30,11 @@ class _HomescreenState extends State<Homescreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    List<Widget> _widgetOptions = <Widget>[Inboxscreen(), Sentboxscreen()];
+    List<Widget> _widgetOptions = <Widget>[
+      Inboxscreen(),
+      Drivescreen(),
+      Sentboxscreen()
+    ];
     return WillPopScope(
       onWillPop: () {
         final timegap = DateTime.now().difference(pre_backpress);
@@ -105,6 +110,10 @@ class _HomescreenState extends State<Homescreen> {
                   GButton(
                     icon: LineIcons.inbox,
                     text: 'Inbox',
+                  ),
+                  GButton(
+                    icon: Icons.folder_open,
+                    text: 'Drive',
                   ),
                   GButton(
                     icon: Icons.send_to_mobile_outlined,

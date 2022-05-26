@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:securevideo/pages/sign_in_up/authcheckingscreen.dart';
 import 'package:securevideo/pages/sign_in_up/signin.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -30,7 +31,7 @@ class StartState extends State<WelcomeScreen> {
 
   route() {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => Signin()));
+        context, MaterialPageRoute(builder: (context) => AuthChecking()));
   }
 
   initScreen(BuildContext context) {
@@ -54,7 +55,7 @@ class StartState extends State<WelcomeScreen> {
             height: size.height * 0.2,
           ),
           Text(
-            "Copyright 2022 © Secure Video",
+            "Copyright 2022 © Cdrive",
             //Copyright 2021 © Dinesh Asian Mart
             style: TextStyle(
               fontSize: size.width * 0.04,

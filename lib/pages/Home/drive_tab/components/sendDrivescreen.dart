@@ -11,7 +11,7 @@ import 'dart:convert';
 import 'package:lottie/lottie.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:securevideo/constants_data/ui_constants.dart';
+import 'package:securevideo/models/drivemodel.dart';
 import 'package:securevideo/models/keymodel.dart';
 import 'package:securevideo/models/videomodel.dart';
 import 'package:securevideo/pages/Home/homescreen.dart';
@@ -28,12 +28,12 @@ import 'package:securevideo/ui_components/tots.dart';
 import 'package:video_player/video_player.dart';
 import 'package:path/path.dart' as p;
 
-class SendVideoscreen extends StatefulWidget {
+class SendDrivescreen extends StatefulWidget {
   @override
-  _SendVideoscreen createState() => _SendVideoscreen();
+  _SendDrivescreen createState() => _SendDrivescreen();
 }
 
-class _SendVideoscreen extends State<SendVideoscreen> {
+class _SendDrivescreen extends State<SendDrivescreen> {
   final ImagePicker _picker = ImagePicker();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailcon = TextEditingController();
@@ -85,13 +85,6 @@ class _SendVideoscreen extends State<SendVideoscreen> {
                           ? GestureDetector(
                               onDoubleTap: () {
                                 OpenFile.open(getedfile!.path);
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) => PlayVideoScreen(
-                                //               file: File(_video!.path),
-                                //               name: _video!.name,
-                                //             )));
                               },
                               child: Container(
                                 //   height: size.height * 0.6,
@@ -287,11 +280,11 @@ class _SendVideoscreen extends State<SendVideoscreen> {
                                             ],
                                           ),
                                           child: Gnoiconformfiled(
-                                              hintText: "Email",
-                                              label: "Email",
+                                              hintText: "Enter File name",
+                                              label: "Enter File name",
                                               onchange: (text) {},
                                               valid: (email) {
-                                                return Validater.vaildemail(
+                                                return Validater.genaralvalid(
                                                     email!);
                                               },
                                               save: (text) {},
@@ -322,88 +315,53 @@ class _SendVideoscreen extends State<SendVideoscreen> {
                                           isuploading = true;
                                           setState(() {});
                                           String id = Date.getDateTimeId();
-                                          int uexsit = await FireDBhandeler
-                                              .checkdocstatus(
-                                                  "/users/", _emailcon.text);
-                                          if (uexsit == 0) {
-                                            final extension =
-                                                p.extension(_enfile!.path);
-                                            print(extension);
-                                            String vlink =
-                                                await ImageUploader.uploadData(
-                                                    _enfile!, id + extension);
-                                            print(vlink);
-                                            if (vlink != "false") {
-                                              Videomodel videomodel =
-                                                  Videomodel(
-                                                      id: id,
-                                                      senderemail: user!.email
-                                                          .toString(),
-                                                      reciveremail:
-                                                          _emailcon.text,
-                                                      videourl: vlink,
-                                                      date: Date
-                                                          .getDatetimenow());
-                                              int res1 = await FireDBhandeler
-                                                  .sendvideodoc(videomodel,
-                                                      _emailcon.text);
-                                              int res2 = await FireDBhandeler
-                                                  .savevideodoc(videomodel);
-                                              Keymodel keymodel = Keymodel(
-                                                  id: id,
-                                                  key: _keytext,
-                                                  addeddate:
-                                                      Date.getDatetimenow(),
-                                                  type: extension);
-                                              int res3 = await FireDBhandeler
-                                                  .savekeydoc(keymodel);
-                                              int res4 = await FireDBhandeler
-                                                  .sendkeydoc(
-                                                      keymodel, _emailcon.text);
 
-                                              isuploading = false;
+                                          final extension =
+                                              p.extension(_enfile!.path);
+                                          print(extension);
+                                          String vlink =
+                                              await ImageUploader.uploadData(
+                                                  _enfile!, id + extension);
+                                          print(vlink);
+                                          if (vlink != "false") {
+                                            Drivemodel gmodel = Drivemodel(
+                                                id: id,
+                                                extesion: fileextension,
+                                                fileName: _emailcon.text,
+                                                fileUrl: vlink,
+                                                date: Date.getDatetimenow());
+                                            int res1 = await FireDBhandeler
+                                                .addDrivedoc(gmodel);
+
+                                            Keymodel keymodel = Keymodel(
+                                                id: id,
+                                                key: _keytext,
+                                                addeddate:
+                                                    Date.getDatetimenow(),
+                                                type: extension);
+                                            int res2 = await FireDBhandeler
+                                                .adddriveKeydoc(keymodel);
+
+                                            isuploading = false;
+                                            setState(() {});
+                                            print("res1--$res1 res2--$res2");
+                                            if (res1 == 1 && res2 == 1) {
+                                              // iserror = true;
                                               setState(() {});
-
-                                              if (res1 == 2 || res4 == 2) {
-                                                iserror = true;
-                                                setState(() {});
-                                                Customtost.commontost(
-                                                    "Invalid email",
-                                                    Colors.redAccent);
-                                              } else {
-                                                if (res1 == 1 &&
-                                                    res2 == 1 &&
-                                                    res3 == 1 &&
-                                                    res4 == 1) {
-                                                  Customtost.commontost(
-                                                      "Uploaded",
-                                                      Colors.deepPurpleAccent);
-                                                  Navigator.pushReplacement(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              Homescreen()));
-                                                } else {
-                                                  Customtost.commontost(
-                                                      "Uploading failed",
-                                                      Colors.redAccent);
-                                                }
-                                              }
+                                              Customtost.commontost("Uploaded",
+                                                  Colors.blueAccent);
                                             } else {
                                               Customtost.commontost(
                                                   "Uploading failed",
                                                   Colors.redAccent);
                                             }
-                                            isuploading = false;
-                                            setState(() {});
                                           } else {
-                                            iserror = true;
-                                            isuploading = false;
-                                            setState(() {});
                                             Customtost.commontost(
-                                                "Invalid email",
+                                                "Uploading failed",
                                                 Colors.redAccent);
                                           }
+                                          isuploading = false;
+                                          setState(() {});
                                         } else {
                                           print("not complete");
                                         }
@@ -442,12 +400,12 @@ class _SendVideoscreen extends State<SendVideoscreen> {
                                           child: Center(
                                             child: ListTile(
                                               leading: Icon(
-                                                Icons.send_rounded,
+                                                Icons.upload_rounded,
                                                 color: Colors.white,
                                                 size: size.width * 0.07,
                                               ),
                                               title: Text(
-                                                " Send encrypted file",
+                                                " Upload encrypted file",
                                                 style: TextStyle(
                                                     fontSize:
                                                         size.width * 0.043,

@@ -6,11 +6,13 @@ class EmailAuth extends ChangeNotifier {
   int r = 0; //signup
   int i = 0; //sign in
 
-  Future emailsignUp(String em, String pw) async {
+  Future<int> emailsignUp(String em, String pw) async {
+    int res = 0;
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: em, password: pw);
       r = 0;
+      res = 1;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         r = 1;
@@ -25,6 +27,7 @@ class EmailAuth extends ChangeNotifier {
     }
 
     notifyListeners();
+    return res;
   }
 
   Future<int> emailsignIN(em, pw) async {

@@ -1,18 +1,25 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:securevideo/constants_data/ui_constants.dart';
 import 'package:securevideo/pages/sign_in_up/emailveryficationscreen.dart';
 import 'package:securevideo/pages/sign_in_up/signin.dart';
 import 'package:securevideo/service/auth/auth.dart';
 import 'package:securevideo/service/auth/emailverification.dart';
+import 'package:securevideo/service/auth/google/GoogleSignAuth.dart';
+import 'package:securevideo/service/firebase_handeler/user_handeler.dart';
 import 'package:securevideo/service/validater/validate_handeler.dart';
 import 'package:securevideo/ui_components/already_have_an_account_acheck.dart';
 
 import 'package:securevideo/ui_components/buttons.dart';
+import 'package:securevideo/ui_components/or_divider.dart';
+import 'package:securevideo/ui_components/social_icon.dart';
 
 import 'package:securevideo/ui_components/textfileds.dart';
+import 'package:securevideo/ui_components/tots.dart';
 
+import 'authcheckingscreen.dart';
 import 'background.dart';
 
 class Signup extends StatefulWidget {
@@ -25,6 +32,7 @@ class _SignupState extends State<Signup> {
 
   String email = "";
   String password = "";
+  var emailauth = EmailAuth();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -135,30 +143,26 @@ class _SignupState extends State<Signup> {
                                   ],
                                 ),
                               ));
-                              Random random = Random();
-                              String code = random.nextInt(9).toString() +
-                                  random.nextInt(9).toString() +
-                                  random.nextInt(9).toString() +
-                                  random.nextInt(9).toString() +
-                                  random.nextInt(9).toString();
-                              print(code);
-                              int res =
-                                  await Emailverification.sendcode(email, code);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return EmailVerifyScreen(
-                                      sendcode: code,
-                                      email: email,
-                                      password: password,
-                                    );
-                                  },
-                                ),
-                              );
-                              print(res);
-                            } else {
-                              print("not complete");
+                              int r =
+                                  await emailauth.emailsignUp(email, password);
+
+                              if (r == 1) {
+                                await UserdbHandeler.adduser(email);
+                                // await UserdbHandeler.updateuserlist(
+                                //     widget.email);
+                                print("r name");
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return AuthChecking();
+                                    },
+                                  ),
+                                );
+                              } else {
+                                Customtost.commontost(
+                                    "Email already exists", Colors.red);
+                              }
                             }
                           },
                           color: kprimaryColor,
@@ -166,7 +170,6 @@ class _SignupState extends State<Signup> {
                         ),
                       ),
                     ),
-                    //OrDivider(),
                     AlreadyHaveAnAccountCheck(
                       login: false,
                       press: () {
@@ -179,6 +182,21 @@ class _SignupState extends State<Signup> {
                           ),
                         );
                       },
+                    ),
+                    OrDivider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        SocalIcon(
+                          iconSrc: "assets/icons/google-symbol.svg",
+                          press: () {
+                            final provider = Provider.of<GoogleSignInProvider>(
+                                context,
+                                listen: false);
+                            provider.googleLogin();
+                          },
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: size.height * 0.08,

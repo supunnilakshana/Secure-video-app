@@ -5,13 +5,35 @@ class UserdbHandeler {
   static final user = FirebaseAuth.instance.currentUser;
   static final firestoreInstance = FirebaseFirestore.instance;
 
+  //check doc is exists
+  static Future<int> checkdocstatus(String collectionpath, String docid) async {
+    var a = await FirebaseFirestore.instance
+        .collection(collectionpath)
+        .doc(docid)
+        .get();
+    if (a.exists) {
+      print('Exists');
+      return 0;
+    } else if (!a.exists) {
+      print('Not exists');
+      return 1;
+    } else {
+      return 2;
+    }
+  }
+
 //--------------------------------------add user----------------------------------------------------------------------------
   static Future<void> adduser(String email) async {
-    firestoreInstance.collection("users").doc(email).set({
-      "email": email,
-    }).then((_) {
-      print("create user doc");
-    });
+    int existuser = await checkdocstatus("/users/", email);
+
+    if (existuser == 1) {
+      firestoreInstance.collection("users").doc(email).set({
+        "email": email,
+      }).then((_) {
+        print("create user doc");
+      });
+    } else
+      print("user doc allready user doc");
   }
 
   //--------------------------------------get user user list---------------------------------------------------------------------------

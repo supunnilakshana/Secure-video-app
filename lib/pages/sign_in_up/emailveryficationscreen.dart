@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:securevideo/constants_data/ui_constants.dart';
 import 'package:securevideo/pages/sign_in_up/authcheckingscreen.dart';
 import 'package:securevideo/service/auth/auth.dart';
+import 'package:securevideo/service/auth/emailverification.dart';
 import 'package:securevideo/service/firebase_handeler/user_handeler.dart';
 import 'package:securevideo/service/validater/validate_handeler.dart';
 import 'package:securevideo/ui_components/already_have_an_account_acheck.dart';
@@ -10,6 +11,7 @@ import 'package:securevideo/ui_components/or_divider.dart';
 import 'package:securevideo/ui_components/textfileds.dart';
 
 import 'background.dart';
+import 'dart:math';
 import 'signup.dart';
 
 class EmailVerifyScreen extends StatefulWidget {
@@ -33,10 +35,17 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
   String password = "";
   var emailauth = EmailAuth();
   String statusString = "Invalid Verification Code!!";
+  late String verifycode;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController usernamecontroller = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    verifycode = widget.sendcode;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +132,7 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
                           bicon: Icon(Icons.verified_user_outlined),
                           onpress: () async {
                             if (_formKey.currentState!.validate()) {
-                              if (widget.sendcode == vcode) {
+                              if (verifycode == vcode) {
                                 _scaffoldKey.currentState!
                                     // ignore: deprecated_member_use
                                     .showSnackBar(new SnackBar(
@@ -137,11 +146,10 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
                                   ),
                                 ));
 
-                                await emailauth.emailsignUp(
+                                int r = await emailauth.emailsignUp(
                                     widget.email, widget.password);
-                                int r = emailauth.getSignupstatus();
 
-                                if (r == 0) {
+                                if (r == 1) {
                                   await UserdbHandeler.adduser(widget.email);
                                   // await UserdbHandeler.updateuserlist(
                                   //     widget.email);
@@ -182,15 +190,22 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
                     Padding(
                       padding: EdgeInsets.only(top: size.height * 0),
                       child: GestureDetector(
-                        onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) {
-                          //       return Forgetpasswordscreen();
-                          //     },
-                          //   ),
-                          // );
+                        onTap: () async {
+                          Random random = Random();
+                          String code = random.nextInt(9).toString() +
+                              random.nextInt(9).toString() +
+                              random.nextInt(9).toString() +
+                              random.nextInt(9).toString() +
+                              random.nextInt(9).toString();
+                          print(code);
+                          verifycode = code;
+                          int res = await Emailverification.sendcode(
+                              widget.email, code);
+                          print(res);
+                          setState(() {});
+                          if (res == 1) {
+                            print("send email");
+                          } else {}
                         },
                         child: Text(
                           "Send Verification Code Again.",
